@@ -4,32 +4,14 @@ import math
 from decimal import Decimal, DefaultContext, setcontext
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Protocol, Optional, List
+from typing import Optional, List
 from functools import lru_cache
 from calc_seduc.connection import defconn
+from calc_seduc.protocols import Model
 
 # Decimal default precision
 DefaultContext.prec = 9
 setcontext(DefaultContext)
-
-
-class Model(Protocol):
-    """Protocol that abstracts all application's Models"""
-
-    id: Optional[int] = None
-
-    def save(self, conn=None):
-        """Saves object data instance into database"""
-
-
-class ModelCreator(Protocol):
-    """Protocol that abstracts all application's ModelCreator"""
-
-    def get(self, id: int, conn=None):
-        """Method that retrieves a instance of given Model"""
-
-    def get_all(self, conn=None):
-        """Method that retrieves all instances from a given Model"""
 
 
 @dataclass(slots=True)

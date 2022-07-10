@@ -1,29 +1,7 @@
-from typing import Protocol, Type, List
+from typing import Type, List
 from calc_seduc.connection import defconn
-from calc_seduc.processors import Processor
-from calc_seduc.models import Model, ModelCreator
+from calc_seduc.protocols import Model, ModelCreator, Processor
 from calc_seduc.utils import get_processed_contracts_ids
-
-
-class Controller(Protocol):
-    """Protocol that abstracts a controller calc_seduc application"""
-
-    def __call__(self):
-        """Execute Controller pipeline"""
-
-    def get_non_processed_contracts(self) -> List[Model]:
-        """Method that gets all non processed contracts on database"""
-
-    def process_contracts(self) -> None:
-        """Method that process every contract in self.unprocessed using the
-        provided processor"""
-
-    def save_data(self) -> None:
-        """Method that saves payments in self.payments on database"""
-
-    def export_csv(self) -> None:
-        """Method that creates a csv spreadsheet with all payment and earnings
-        analysis"""
 
 
 class MainController:

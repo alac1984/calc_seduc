@@ -1,19 +1,7 @@
 """Module that offers all types of payment processors objects"""
 
 from typing import Protocol, Type
-from calc_seduc.models import Model, ModelCreator
-
-
-class Processor(Protocol):
-    """Protocol that abstracts all application's payment processors"""
-
-    def __init__(self, ptable_creator: Type[ModelCreator], conn=None):
-        """Instantiate a Processor object"""
-
-    def process(self, contract: Model):
-        """Method that process information from a given contract"""
-
-    # TODO: check what methods a PaymentProcessor should have
+from calc_seduc.protocols import Model, ModelCreator
 
 
 class PerHourProcessor:
