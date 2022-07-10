@@ -5,7 +5,7 @@ from decimal import Decimal
 from collections import namedtuple
 from datetime import datetime
 from pytest import fixture
-from models import (
+from calc_seduc.models import (
     School,
     SchoolCreator,
     Contract,
@@ -17,8 +17,8 @@ from models import (
     PerHourPayment,
     PerHourPaymentCreator,
 )
-from processors import PerHourProcessor
-from controller import MainController
+from calc_seduc.processors import PerHourProcessor
+from calc_seduc.controller import MainController
 
 
 @fixture(scope="module")

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Protocol, Optional, List
 from functools import lru_cache
-from connection import defconn
+from calc_seduc.connection import defconn
 
 # Decimal default precision
 DefaultContext.prec = 9

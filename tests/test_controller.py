@@ -1,8 +1,8 @@
 """Module for testing controller.py methods"""
 
 
-from models import Contract
-from controller import MainController
+from calc_seduc.models import Contract
+from calc_seduc.controller import MainController
 
 
 def test_controller_instantiation(main_controller):

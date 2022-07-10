@@ -1,8 +1,8 @@
-from connection import defconn
-from processors import Processor
 from typing import Protocol, Type, List
-from models import Model, ModelCreator
-from utils import get_processed_contracts_ids
+from calc_seduc.connection import defconn
+from calc_seduc.processors import Processor
+from calc_seduc.models import Model, ModelCreator
+from calc_seduc.utils import get_processed_contracts_ids
 
 
 class Controller(Protocol):

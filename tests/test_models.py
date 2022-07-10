@@ -2,7 +2,7 @@
 
 from datetime import datetime
 from decimal import Decimal
-from models import (
+from calc_seduc.models import (
     School,
     Contract,
     PaymentTable,

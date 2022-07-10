@@ -1,5 +1,7 @@
-from models import Model, ModelCreator
+"""Module that offers all types of payment processors objects"""
+
 from typing import Protocol, Type
+from calc_seduc.models import Model, ModelCreator
 
 
 class Processor(Protocol):
@@ -22,9 +24,6 @@ class PerHourProcessor:
     def __init__(self, ptable_creator: Type[ModelCreator], conn=None):
         self.ptable_creator = ptable_creator()
         self.payment_tables = self.ptable_creator.get_all(conn=conn)
-
-    def get_contract_weeks(self, contract: Model):
-        pass
 
     def process(self, contract: Model):
         """Method that process information from a given contract"""
