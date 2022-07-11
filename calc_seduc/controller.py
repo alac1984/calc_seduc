@@ -1,6 +1,8 @@
 from typing import Type, List
 from calc_seduc.connection import defconn
-from calc_seduc.protocols import Model, ModelCreator, Processor
+from calc_seduc.models import Contract
+from calc_seduc.factories import ContractCreator
+from calc_seduc.protocols import Model, Processor, ModelCreator
 from calc_seduc.utils import get_processed_contracts_ids
 
 
@@ -13,7 +15,7 @@ class MainController:
 
     def __init__(
         self,
-        contract_creator: ModelCreator,
+        contract_creator: ContractCreator,
         ptable_creator: Type[ModelCreator],
         processor: Type[Processor],
         conn=None,
@@ -21,7 +23,7 @@ class MainController:
         self.contract_creator = contract_creator
         self.processor = processor(ptable_creator)
         self.conn = defconn if not conn else conn
-        self.unprocessed: List[Model] = []
+        self.unprocessed: List[Contract] = []
         self.payments: List[Model] = []
 
     def __call__(self):

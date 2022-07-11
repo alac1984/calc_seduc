@@ -10,6 +10,17 @@ class Model(Protocol):
         """Saves object data instance into database"""
 
 
+class Payment(Protocol):
+    """Protocol that abstracts all application's Payments"""
+
+    id: Optional[int] = None
+
+    def save(self, conn=None):
+        """Saves object data instance into database"""
+
+    # TODO: check what differs from a payment and a model
+
+
 class ModelCreator(Protocol):
     """Protocol that abstracts all application's ModelCreator"""
 
