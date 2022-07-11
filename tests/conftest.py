@@ -7,18 +7,14 @@ from datetime import datetime
 from pytest import fixture
 from calc_seduc.models import (
     School,
-    SchoolCreator,
     Contract,
-    ContractCreator,
     PaymentTable,
-    PaymentTableCreator,
     Earning,
-    EarningCreator,
     PerHourPayment,
-    PerHourPaymentCreator,
 )
 from calc_seduc.processors import PerHourProcessor
 from calc_seduc.controller import MainController
+from calc_seduc.factories import FACTORIES
 
 
 @fixture(scope="module")
@@ -190,18 +186,12 @@ def objs(database):
     objects_names = """
         conn
         school
-        school_creator
         contract
-        contract_creator
         ptable
-        ptable_creator
         earning
-        earning_creator
         perhourpayment
-        perhourpayment_creator
     """
     school = School(name="Rogério Fróes", inep=3934039)
-    school_creator = SchoolCreator()
     contract = Contract(
         school_id=1,
         contract_id=1,
@@ -209,7 +199,6 @@ def objs(database):
         ends=datetime(2022, 3, 1, 0, 0, 0, 1),
         hours=10,
     )
-    contract_creator = ContractCreator()
     ptable = PaymentTable(
         starts=datetime(2022, 1, 1, 0, 0, 0, 1),
         ends=datetime(2022, 2, 1, 0, 0, 0, 1),
@@ -217,11 +206,9 @@ def objs(database):
         prv=Decimal(1.2),
         eoy_bonus=Decimal(4.2),
     )
-    ptable_creator = PaymentTableCreator()
     earning = Earning(
         date=datetime(2022, 1, 1, 0, 0, 0, 1), value=Decimal("3.999999999999")
     )
-    earning_creator = EarningCreator()
     perhourpayment = PerHourPayment(
         contract_id=1,
         paymenttable_id=1,
@@ -230,20 +217,14 @@ def objs(database):
         process_date=datetime(2022, 1, 1, 0, 0, 0, 1),
         value=Decimal("1094.99"),
     )
-    perhourpayment_creator = PerHourPaymentCreator()
     Objects = namedtuple("Objects", objects_names)
     objects = Objects(
         conn,
         school,
-        school_creator,
         contract,
-        contract_creator,
         ptable,
-        ptable_creator,
         earning,
-        earning_creator,
         perhourpayment,
-        perhourpayment_creator,
     )
 
     yield objects
@@ -253,8 +234,8 @@ def objs(database):
 def main_controller():
     """Fixture that contains a MainController object for tests"""
     controller = MainController(
-        contract_creator=ContractCreator(),
-        ptable_creator=PaymentTableCreator,
+        contract_creator=FACTORIES["contract"](),
+        ptable_creator=FACTORIES["paymenttable"],
         processor=PerHourProcessor,
     )
 

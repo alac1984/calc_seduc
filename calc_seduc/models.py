@@ -1,13 +1,17 @@
-"""All models for calc_seduc"""
+"""
+Models for calc_seduc application.
+
+The classes here are mainly dataclasses that will have much
+more data than behavior. All stuff that comes from database
+may have a model representation here.
+"""
 
 import math
 from decimal import Decimal, DefaultContext, setcontext
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional, List
-from functools import lru_cache
+from typing import Optional
 from calc_seduc.connection import defconn
-from calc_seduc.protocols import Model
 
 # Decimal default precision
 DefaultContext.prec = 9
@@ -51,32 +55,6 @@ class School:
                 (self.name, self.inep, self.id),
             )
         conn.commit()
-
-
-class SchoolCreator:
-    """Factory class for School instances"""
-
-    @lru_cache
-    def get(self, id: int, conn=None) -> Model:
-        """Retrieve a School object from database"""
-        conn = defconn if not conn else conn
-        cur = conn.cursor()
-        cur.execute("select * from tb_school where id = ?", (id,))
-        data = cur.fetchone()
-        return School(id=data[0], name=data[1], inep=data[2])
-
-    @lru_cache
-    def get_all(self, conn=None) -> List[Model]:
-        """Retrieve all School objects from database"""
-
-        if not conn:
-            conn = defconn
-
-        cur = conn.cursor()
-        cur.execute("select id from tb_school")
-        ids = cur.fetchall()
-        ids = (id[0] for id in ids)
-        return [self.get(id, conn) for id in ids]
 
 
 @dataclass(slots=True)
@@ -147,41 +125,6 @@ class Contract:
         conn.commit()
 
 
-class ContractCreator:
-    """Factory class for Contract instances"""
-
-    @lru_cache
-    def get(self, id: int, conn=None) -> Model:
-        """Retrieve a Contract object from database"""
-
-        if not conn:
-            conn = defconn
-        cur = conn.cursor()
-        cur.execute("select * from tb_contract where id = ?", (id,))
-        data = cur.fetchone()
-        return Contract(
-            id=data[0],
-            school_id=data[1],
-            contract_id=data[2],
-            starts=data[3],
-            ends=data[4],
-            hours=data[5],
-        )
-
-    @lru_cache
-    def get_all(self, conn=None) -> List[Model]:
-        """Retrieve all Contract objects from database"""
-
-        if not conn:
-            conn = defconn
-
-        cur = conn.cursor()
-        cur.execute("select id from tb_contract")
-        ids = cur.fetchall()
-        ids = (id[0] for id in ids)
-        return [self.get(id, conn) for id in ids]
-
-
 @dataclass(slots=True)
 class PaymentTable:
     """Class that represents a PaymentTable"""
@@ -241,41 +184,6 @@ class PaymentTable:
         conn.commit()
 
 
-class PaymentTableCreator:
-    """Factory class for PaymentTable instances"""
-
-    @lru_cache
-    def get(self, id: int, conn=None) -> Model:
-        """Retrieve a PaymentTable object from database"""
-
-        if not conn:
-            conn = defconn
-        cur = conn.cursor()
-        cur.execute("select * from tb_paymenttable where id = ?", (id,))
-        data = cur.fetchone()
-        return PaymentTable(
-            id=data[0],
-            starts=data[1],
-            ends=data[2],
-            hour_value=Decimal(data[3]),
-            prv=Decimal(data[4]),
-            eoy_bonus=Decimal(data[5]),
-        )
-
-    @lru_cache
-    def get_all(self, conn=None) -> List[Model]:
-        """Retrieve all PaymentTable objects from database"""
-
-        if not conn:
-            conn = defconn
-
-        cur = conn.cursor()
-        cur.execute("select id from tb_paymenttable")
-        ids = cur.fetchall()
-        ids = (id[0] for id in ids)
-        return [self.get(id, conn) for id in ids]
-
-
 @dataclass(slots=True)
 class Earning:
     """Class that represents a Earning"""
@@ -330,34 +238,6 @@ class Earning:
                 ),
             )
         conn.commit()
-
-
-class EarningCreator:
-    """Factory class for Earning instances"""
-
-    @lru_cache
-    def get(self, id: int, conn=None) -> Model:
-        """Retrieve a Earning object from database"""
-
-        if not conn:
-            conn = defconn
-        cur = conn.cursor()
-        cur.execute("select * from tb_earning where id = ?", (id,))
-        data = cur.fetchone()
-        return Earning(id=data[0], date=data[1], value=Decimal(data[2]))
-
-    @lru_cache
-    def get_all(self, conn=None) -> List[Model]:
-        """Retrieve all Earning objects from database"""
-
-        if not conn:
-            conn = defconn
-
-        cur = conn.cursor()
-        cur.execute("select id from tb_earning")
-        ids = cur.fetchall()
-        ids = (id[0] for id in ids)
-        return [self.get(id, conn) for id in ids]
 
 
 @dataclass(slots=True)
@@ -433,39 +313,3 @@ class PerHourPayment:
                 ),
             )
         conn.commit()
-
-
-class PerHourPaymentCreator:
-    """Factory class for PerHourPayment instances"""
-
-    @lru_cache
-    def get(self, id: int, conn=None) -> Model:
-        """Retrieve a PerHourPayment object from database"""
-
-        if not conn:
-            conn = defconn
-        cur = conn.cursor()
-        cur.execute("select * from tb_perhourpayment where id = ?", (id,))
-        data = cur.fetchone()
-        return PerHourPayment(
-            id=data[0],
-            contract_id=data[1],
-            paymenttable_id=data[2],
-            process_date=data[3],
-            ref_month=data[4],
-            ref_year=data[5],
-            value=Decimal(data[6]),
-        )
-
-    @lru_cache
-    def get_all(self, conn=None) -> List[Model]:
-        """Retrieve all PerHourPayment objects from database"""
-
-        if not conn:
-            conn = defconn
-
-        cur = conn.cursor()
-        cur.execute("select id from tb_perhourpayment")
-        ids = cur.fetchall()
-        ids = (id[0] for id in ids)
-        return [self.get(id, conn) for id in ids]
