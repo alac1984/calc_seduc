@@ -177,6 +177,18 @@ def test_payment_table_prv_eoy_bonus(objs):
     assert isinstance(ptable.eoy_bonus, Decimal)
 
 
+def test_payment_table_is_applicable_case_true(objs):
+    """Assert if PaymentTable is_applicable is working"""
+    ptable = FACTORIES["paymenttable"]().get(1, conn=objs.conn)
+    assert ptable.is_applicable(7, 2022) is True
+
+
+def test_payment_table_is_applicable_case_false(objs):
+    """Assert if PaymentTable is_applicable is working"""
+    ptable = FACTORIES["paymenttable"]().get(2, conn=objs.conn)
+    assert ptable.is_applicable(5, 2022) is False
+
+
 def test_earning_save_new_instance(objs):
     """
     Test if Earning save method stores a new

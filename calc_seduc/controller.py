@@ -20,9 +20,10 @@ class MainController:
         processor: Type[Processor],
         conn=None,
     ):  # noqa
-        self.contract_creator = contract_creator
-        self.processor = processor(ptable_creator)
         self.conn = defconn if not conn else conn
+        ptables = ptable_creator().get_all(self.conn)
+        self.contract_creator = contract_creator
+        self.processor = processor(ptables)
         self.unprocessed: List[Contract] = []
         self.payments: List[Model] = []
 

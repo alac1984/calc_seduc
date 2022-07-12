@@ -90,7 +90,6 @@ class PaymentTableCreator:
     @lru_cache
     def get_all(self, conn=None) -> List[PaymentTable]:
         """Retrieve all PaymentTable objects from database"""
-
         if not conn:
             conn = defconn
 

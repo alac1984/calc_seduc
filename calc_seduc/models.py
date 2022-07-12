@@ -183,6 +183,13 @@ class PaymentTable:
             )
         conn.commit()
 
+    def is_applicable(self, month: int, year: int) -> bool:
+        """Check if a PaymentTable is applicable for a given month and year"""
+        return (
+            self.starts.month <= month <= self.ends.month
+            and self.starts.year <= year <= self.ends.year
+        )
+
 
 @dataclass(slots=True)
 class Earning:

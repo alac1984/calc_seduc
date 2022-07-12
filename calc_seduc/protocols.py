@@ -1,4 +1,5 @@
 from typing import Protocol, Optional, List, Type
+from calc_seduc.models import Contract
 
 
 class Model(Protocol):
@@ -8,17 +9,6 @@ class Model(Protocol):
 
     def save(self, conn=None):
         """Saves object data instance into database"""
-
-
-class Payment(Protocol):
-    """Protocol that abstracts all application's Payments"""
-
-    id: Optional[int] = None
-
-    def save(self, conn=None):
-        """Saves object data instance into database"""
-
-    # TODO: check what differs from a payment and a model
 
 
 class ModelCreator(Protocol):
@@ -34,10 +24,7 @@ class ModelCreator(Protocol):
 class Processor(Protocol):
     """Protocol that abstracts all application's payment processors"""
 
-    def __init__(self, ptable_creator: Type[ModelCreator], conn=None):
-        """Instantiate a Processor object"""
-
-    def process(self, contract: Model):
+    def process(self, contract: Contract, year: int, month: int):
         """Method that process information from a given contract"""
 
     # TODO: check what methods a PaymentProcessor should have
