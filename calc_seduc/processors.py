@@ -1,9 +1,21 @@
 """Module that offers all types of payment processors objects"""
 
 from decimal import Decimal
-from typing import List
-from calc_seduc.models import Contract, PaymentTable
+from typing import Protocol, List
+from calc_seduc.models import AbstractContract, PaymentTable
 from calc_seduc.calendar import Month
+
+
+class AbstractProcessor(Protocol):
+    """Protocol that abstracts all application's payment processors"""
+
+    def __init__(self, payment_tables: List[PaymentTable], conn=None):
+        """Processor initializer"""
+
+    def process(self, contract: AbstractContract, year: int, month: int):
+        """Method that process information from a given contract"""
+
+    # TODO: check what methods a PaymentProcessor should have
 
 
 class NoPaymentTable(Exception):
@@ -28,7 +40,7 @@ class PerHourProcessor:
                 return table
         raise NoPaymentTable(f"No payment table for {year}/{month}")
 
-    def process(self, contract: Contract, year: int, month: int) -> Decimal:
+    def process(self, contract: AbstractContract, year: int, month: int) -> Decimal:
         """Method that process information from a given contract"""
         ptable = self.define_payment_table(year, month)
         month_obj = Month(year, month)

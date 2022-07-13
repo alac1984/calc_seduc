@@ -2,13 +2,13 @@
 
 
 from calc_seduc.models import Contract
-from calc_seduc.controller import MainController
+from calc_seduc.controller import Controller
 
 
 def test_controller_instantiation(main_controller):
     """Assert if a Controller instance can be instatiated with given expected
     arguments"""
-    assert isinstance(main_controller, MainController)
+    assert isinstance(main_controller, Controller)
 
 
 def test_controller_unprocessed_before_call_is_list(main_controller):

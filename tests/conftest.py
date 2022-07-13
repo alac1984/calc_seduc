@@ -1,20 +1,10 @@
 """Fixtures for testing calc_seduc"""
 
 import sqlite3
-from decimal import Decimal
-from collections import namedtuple
-from datetime import datetime
 from pytest import fixture
-from calc_seduc.models import (
-    School,
-    Contract,
-    PaymentTable,
-    Earning,
-    PerHourPayment,
-)
+from calc_seduc.models import ContractFactory, PaymentTableFactory
 from calc_seduc.processors import PerHourProcessor
-from calc_seduc.controller import MainController
-from calc_seduc.factories import FACTORIES
+from calc_seduc.controller import Controller
 
 
 @fixture(scope="module")
@@ -178,64 +168,12 @@ def database():
     yield conn
 
 
-@fixture
-def objs(database):
-    """Fixture that creates dummy Model and ModelCreator objects for tests to
-    interact with"""
-    conn = database
-    objects_names = """
-        conn
-        school
-        contract
-        ptable
-        earning
-        perhourpayment
-    """
-    school = School(name="Rogério Fróes", inep=3934039)
-    contract = Contract(
-        school_id=1,
-        contract_id=1,
-        starts=datetime(2022, 1, 1, 0, 0, 0, 1),
-        ends=datetime(2022, 3, 1, 0, 0, 0, 1),
-        hours=10,
-    )
-    ptable = PaymentTable(
-        starts=datetime(2022, 1, 1, 0, 0, 0, 1),
-        ends=datetime(2022, 2, 1, 0, 0, 0, 1),
-        hour_value=Decimal(2.4),
-        prv=Decimal(1.2),
-        eoy_bonus=Decimal(4.2),
-    )
-    earning = Earning(
-        date=datetime(2022, 1, 1, 0, 0, 0, 1), value=Decimal("3.999999999999")
-    )
-    perhourpayment = PerHourPayment(
-        contract_id=1,
-        paymenttable_id=1,
-        ref_month=3,
-        ref_year=2022,
-        process_date=datetime(2022, 1, 1, 0, 0, 0, 1),
-        value=Decimal("1094.99"),
-    )
-    Objects = namedtuple("Objects", objects_names)
-    objects = Objects(
-        conn,
-        school,
-        contract,
-        ptable,
-        earning,
-        perhourpayment,
-    )
-
-    yield objects
-
-
 @fixture(scope="module")
 def main_controller():
-    """Fixture that contains a MainController object for tests"""
-    controller = MainController(
-        contract_creator=FACTORIES["contract"](),
-        ptable_creator=FACTORIES["paymenttable"],
+    """Fixture that contains a Controller object for tests"""
+    controller = Controller(
+        contract_factory=ContractFactory(),
+        ptable_factory=PaymentTableFactory,
         processor=PerHourProcessor,
     )
 
